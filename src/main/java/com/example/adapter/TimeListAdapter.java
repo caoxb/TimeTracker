@@ -11,7 +11,13 @@ import android.widget.TextView;
 
 import com.example.R;
 
+import java.util.List;
+
 public class TimeListAdapter extends ArrayAdapter<Long> {
+
+    public TimeListAdapter(Context context, int textViewResourceId, List<Long> list) {
+        super(context, textViewResourceId, list);
+    }
 
     public TimeListAdapter(@NonNull Context context, int resource) {
         super(context, resource);
