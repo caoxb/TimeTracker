@@ -4,8 +4,11 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.AsyncQueryHandler;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
@@ -15,6 +18,7 @@ import android.util.Log;
 
 import com.example.R;
 import com.example.TimeTrackerActivity;
+import com.example.provider.TaskProvider;
 
 import java.lang.ref.WeakReference;
 
@@ -26,6 +30,7 @@ public class TimerService extends Service {
     private Notification mNotification = null;
     private long mStart = 0;
     private long mTime = 0;
+    private long mTaskId = -1;
     private TimeHandler mHandler;
 
     public class LocalBinder extends Binder {
@@ -69,7 +74,9 @@ public class TimerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "Received start id " + startId + " with intent: " + intent);
-
+        if (mTaskId < 0) {
+            createNewTask();
+        }
         // Show notification when we start the timer
         showNotification();
 
@@ -100,6 +107,8 @@ public class TimerService extends Service {
         mHandler.removeMessages(0);
         stopSelf();
         mNM.cancel(TIMER_NOTIFICATION);
+
+        updateTask();
     }
 
     public boolean isTimerRunning() {
@@ -110,6 +119,7 @@ public class TimerService extends Service {
         stopTimer();
         timerStopped(mTime);
         mTime = 0;
+        mTaskId = -1;
     }
 
     private void timerStopped(long time) {
@@ -130,6 +140,24 @@ public class TimerService extends Service {
 
         // Now update the notification
         updateNotification(time);
+    }
+
+    public Long getTaskId() {
+        return this.mTaskId;
+    }
+
+    public void setTask(long id, long time) {
+        resetTimer();
+        mTaskId = id;
+        mTime = time;
+    }
+
+    public long getTime() {
+        return this.mTime;
+    }
+
+    public void setTime(long time) {
+        mTime = time;
     }
 
     /**
@@ -160,5 +188,37 @@ public class TimerService extends Service {
         mNotification.tickerText = message;
         mNotification.contentIntent = pendingIntent;
         mNM.notify(TIMER_NOTIFICATION, mNotification);
+    }
+
+    private void createNewTask() {
+        AsyncQueryHandler handler = new AsyncQueryHandler(getContentResolver()) {
+            @Override
+            protected void onInsertComplete(int token, Object cookie, Uri uri) {
+                mTaskId = Long.parseLong(uri.getLastPathSegment());
+            }
+        };
+
+        Uri uri = TaskProvider.getContentUri();
+        ContentValues cv = new ContentValues();
+        cv.put(TaskProvider.Task.NAME, getResources().getString(R.string.task_name));
+        cv.put(TaskProvider.Task.DATE, System.currentTimeMillis());
+        cv.put(TaskProvider.Task.ACTIVE, true);
+        cv.put(TaskProvider.Task.TIME, mTime);
+
+        handler.startInsert(0, null, uri, cv);
+    }
+
+    private void updateTask() {
+        AsyncQueryHandler handler = new AsyncQueryHandler(getContentResolver()) {
+        };
+
+        Uri uri = TaskProvider.getContentUri();
+        ContentValues cv = new ContentValues();
+        cv.put(TaskProvider.Task.ACTIVE, false);
+        cv.put(TaskProvider.Task.TIME, mTime);
+        String where = TaskProvider.Task._ID + " = ?";
+        String[] args = new String[] {Long.toString(mTaskId)};
+
+        handler.startUpdate(0, null, uri, cv, where, args);
     }
 }
