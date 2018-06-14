@@ -12,28 +12,42 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".TimeTrackerActivity"
-            android:launchMode="singleTop"
-            >
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service
             android:name=".service.TimerService"
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".EditTaskActivity" android:windowSoftInputMode="stateUnchanged" />
-        <activity android:name=".TaskListActivity">
-        </activity>
+        <activity
+            android:name=".EditTaskActivity"
+            android:windowSoftInputMode="stateUnchanged" />
+        <activity android:name=".TaskListActivity"></activity>
 
         <provider
             android:name=".provider.TaskProvider"
             android:authorities="com.example.TimeTracker"
             android:enabled="true"
-            android:exported="true"></provider>
+            android:exported="true" />
+
+        <receiver android:name=".widget.TimerWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.example.ActionTimeUpdate" />
+                <action android:name="com.example.ActionTimerFinished" />
+                <action android:name="com.example.ActionTimerStopped" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/timer_widget_provider_info" />
+        </receiver>
     </application>
 
 </manifest>

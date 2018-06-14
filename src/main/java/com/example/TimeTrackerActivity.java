@@ -45,6 +45,7 @@ import java.util.List;
 public class TimeTrackerActivity extends AppCompatActivity implements View.OnClickListener,ServiceConnection,ViewPager.OnPageChangeListener, TaskListFragment.TaskListener {
     public static final String ACTION_TIME_UPDATE = "com.example.ActionTimeUpdate";
     public static final String ACTION_TIMER_FINISHED = "com.example.ActionTimerFinished";
+    public static final String ACTION_TIMER_STOPPED = "com.example.ActionTimerStopped";
     private static final String TAG = "TimeTrackerActivity";
     public static int TIMER_NOTIFICATION = 0;
 

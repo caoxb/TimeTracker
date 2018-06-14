@@ -46,4 +46,6 @@ Cras sagittis, magna a volutpat feugiat, nisi ipsum accumsan ipsum, ut lacinia q
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer tincidunt consequat sapien, ac auctor orci hendrerit at. Morbi laoreet orci eget eros elementum vitae bibendum nibh volutpat. Morbi sit amet lorem tellus, sit amet posuere augue. Nullam nibh orci, tristique a iaculis non, sagittis quis felis. Mauris volutpat dui nec enim suscipit lobortis. Pellentesque purus odio, mattis interdum fermentum nec, tincidunt convallis purus. Integer cursus elit sed ipsum condimentum vitae tincidunt risus fermentum. Suspendisse eu magna vitae odio vulputate mollis vel ullamcorper neque. Maecenas suscipit ligula lacinia lectus ullamcorper non elementum quam interdum. Proin ipsum tortor, posuere in ullamcorper eget, placerat quis nunc. Praesent pharetra pulvinar neque sed pellentesque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nunc ligula ligula, faucibus eget ornare id, elementum vel erat. Nulla ut vestibulum tortor.</string>
     <string name="timer">Timer</string>
     <string name="tasks">Tasks</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>
